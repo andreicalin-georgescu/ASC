@@ -1,0 +1,58 @@
+Labortator 5 - optimizari
+
+Georgescu Andrei Calin
+334CA
+
+Detalii sistem:
+Intel Core i7 Coffee-Lake 6 cores
+32GB RAM DDR4
+MacOS Catalina 10.15.3
+
+* Task1:
+	A fost elaborat fisierul ex1.c, care prezinta inmultirea de matrice efectuata clasic,
+	cat si pe cea in care suma este declarata de tip registru in bucla.
+
+	Timpi de rulare pentru MAX_ELEM = 500:
+	// fara optimizari
+	- time ./ex1 0  0.41s user 0.00s system 67% cpu 0.606 total
+
+	// cu constante in bucle
+	- time ./ex1 1  0.35s user 0.00s system 99% cpu 0.355 total
+
+	// cu pointeri
+	- time ./ex1 2  0.33s user 0.00s system 99% cpu 0.334 total
+
+	Se observa o usoara imbunatatire a timpului de rulare, datorata faptului ca C[i][j] 
+	este declarata constanta in cadrul buclei.
+
+* Task2:
+	Pentru imbunatatirea suplimentara a algoritmului s-a aplicat si reordonarea buclelor in doua moduri:
+	k - i - j si respectiv k - j - i.
+
+	Timpi de rulare pentru MAX_ELEM = 1000:
+	// fara optimizari 
+	- time ./ex2 0  5.39s user 0.02s system 98% cpu 5.490 total
+
+	// cu reordonare k - i - j
+	- time ./ex2 1  2.76s user 0.01s system 99% cpu 2.789 total
+
+	// cu reordonare k - j - i
+	- time ./ex2 2  2.56s user 0.01s system 99% cpu 2.578 total
+
+	Nota: datorita formei liniarizate si cache-ului, se observa ca nu se respecta regula ca ordonarea
+	k-i-j sa fie mai rapida ca cea k-j-i.
+
+* Task3:
+	Plecand de la codul din laborator au fost aduse urmatoarele imbunatatiri pentru cache:
+		- Matricele au fost reprezentate sub forma liniarizata;
+		- block size-ul a fost setat la 250, luand in considerare dimensiunea cache-ului si a liniei de cache.
+	
+	// Rezultate folosind scheletul de cod pentru 1000 de elemente si nr_reps = 10: 
+
+		Multiply matrices 10 times...
+		Time = 55.283444 
+
+	// Rezultate folosind time:
+		time ./ex3  54.37s user 0.09s system 99% cpu 54.560 total
+
+	

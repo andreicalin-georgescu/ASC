@@ -1,0 +1,61 @@
+Laborator 4 ASC
+Georgescu Andrei Călin, 334CA
+
+Detalii sistem:
+    Processor Name: 6-Core Intel Core i7
+    Processor Speed: 2,6 GHz
+    Total Number of Cores: 6
+    Endianess: Little Endian
+
+    L1i cache size: 32768   B
+    L1d cache size: 32768   B
+    L2  cache size: 256     KB (per core)
+    L3  cache size: 9       MB
+
+    RAM: 32GB DDR4 @2400 Mhz
+
+NOTA: A fost adaugata regula de arhivare si stergere de dSYM in Makefile
+
+Taskuri
+    * Task 1:
+        - a: Am pornit de la 10^6 pana la 10^8. Sizeof(particle) = 3, deci 10^9 fiind aproximativ egal cu 1GB, ar insemna un spatiu 
+        total folosit de 3GB, fapt care duce la blocarea programului.
+
+        - b: Daca dimensiunea maxima a stivei este 8MB si avem sizeof(particle) = 3, inseamna ca dimensiunea maxima posibila este 
+        2796202, dar trebuie sa lasam loc si pentru restul codului.
+
+        - c: Sistemul de operare o sa aloce maximum cat ii permite memoria virtuala (16GB/proces),din care se scade spatiul pentru 
+        kernel, sectiunile de cod, date, bss, rodata, heap si stiva.
+
+    * Task 2:
+        - task2_lin: Ruland cu n = 10000 rata de miss este ~0% (cu o eroare de 0.1%) pentru instructiuni si 0.1% cu aceeasi eroare 
+        pentru date. Asta datorita faptului ca toata matricea este o linie, deci missurile vor fi la minimul posibil. Asadar, timpii 
+        de rulare sunt ~3.5s.
+
+        - task2_mat: Deoarece matricea este parcursa pe linii, rata de miss este comparabila cu primul caz, astfel ca missurile se vor 
+	genera doar putin mai des (la terminarea unei linii din matrice vs la terminarea liniei efective din cache). 
+	Din punctul de vedere al timpui de executie, si acesta este doar marginal mai mare: in medie 3.6s pentru n = 10000.
+
+    * Task 3(bonus - studierea comportamentului cu flaguri de optimizare):
+        - fara -O2 sau -O3: Compilatorul reordoneaza variabilele i, l, a, b pentru aliniere. Astfel, primele in ordinea scaderii adreselor 
+        de pe stiva sunt b-urile (aliniate la 32B in ciuda dimensiunii structurii b de 24 octeti), urmate de a-uri, apoi l-uri si ultimele 
+        sunt i-urile. Deoarece dimensiunile i-urilor, l-urilor si a-urilor sunt puteri de 2, compilatorul aloca doar spatiu pentru acestea, 
+        neincercad sa le alinieze.
+
+        - cu flaguri de optimizare: Afisand toate variabilele, compilatorul nu poate face imbunatatiri majore. Daca ar fi, insa, sa nu afisam
+        unele dintre adrese, compilatorul nu le va mai declara, iar adresele ramase vor fi tot in ordine.
+    
+    NOTA: pentru taskurile 4 si 5 a fost decomentata din cod includerea bibliotecii malloc.h pentru ca rezulta in eroare de compilare pe MacOS 
+    Catalina 10.15.3, iar functionalitatea malloc este regasita in stdlib.h. 
+    
+    * Task 4:
+        a fost folosit si completat codul atasat pentru a afla dimensiunea cache-urilor L1 si L2. Din grafice se observa ca este respectata 
+        valoarea aflata la inceputul laboratorului folosind apeluri de sistem, respectiv L1 = 32KB si L2 ~= 256KB. Se poate observa o descrestere
+        rapida a performantei in apropierea valorilor corespunzatoare umplerii cache-ului (pentru ca atunci noi date vor trebui aduse din memoria 
+        principala).
+
+    * Task 5:
+        Sistemul fiind pe 64 de biti, putem deduce ca si linia de cache ar trebui sa fie de 64 de biti. Daca facem referire la graficul generat, 
+        se observa ca acesta se stabilizeaza dupa ~60 unitati de masura. Acest fapt ne indica noua ca linia de cache are, intr-adevar, 64 de biti.
+    
+    Sunt atasate in folderul laboratorului si graficele generate pe sistemul de lucru.
